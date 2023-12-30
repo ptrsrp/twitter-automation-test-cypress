@@ -1,38 +1,35 @@
 /// <reference types="Cypress" />
-/// <reference types="@cypress/xpath" />
+import LoginPage from '../classes/login.class'
 
-describe("Test Login", () => {
-  it("Login valid with already account", () => {
-    cy.viewport(1700, 1000);
-    //open twitter web
-    cy.visit("https://twitter.com/");
-    cy.get("body").contains("Already have an account?");
-    cy.wait(2000);
-    cy.xpath('//a[@href="/login"]').click();
-    cy.wait(5000);
-    cy.get(
-      '[data-testid="ocfSettingsListPrimaryText"] > :nth-child(1) > .css-1qaijid'
-    ).should("have.text", "Sign in to X");
-    //input username
-    cy.xpath("//input[@name='text']").type("ppoooowty");
-    cy.contains("span", "Next").click();
-    cy.get("#modal-header > :nth-child(1) > .css-1qaijid").should(
-      "have.text",
-      "Enter your password"
-    );
-    //input password
-    cy.xpath("//input[@name='password']").type('cuitan123')
-    cy.xpath("//input[@name='password']").then(($passwordInput) => {
-      const passwordValue = $passwordInput.val();
-      if (passwordValue === "") {
-        cy.get('[data-testid="LoginForm_Login_Button"]').should('have.attr','tabindex','-1')
-        cy.log("password null");
-      } else {
-        cy.get('[data-testid="LoginForm_Login_Button"]').should('have.attr','tabindex','0')
-        cy.log("password not null");
-        cy.get('[data-testid="LoginForm_Login_Button"]').click();
-        cy.get('[data-testid="AppTabBar_Profile_Link"]').should('exist')
-      }
-    });
+// Test case untuk login
+describe("Login with Positive Test", () => {
+  const loginPage = new LoginPage();
+
+  it("should login successfully with valid credentials", () => {
+    loginPage.visitTwitterWeb();
+    cy.wait(3000)
+    loginPage.openLoginPage();
+    cy.wait(3000)
+    loginPage.login("ppoooowty", "cuitanku123");
+    
+  });
+});
+
+describe("Login with Negative Test", () => {
+  const loginPage = new LoginPage();
+  it("Login unsuccessfully with username is null", () => {
+    loginPage.visitTwitterWeb();
+    cy.wait(3000)
+    loginPage.openLoginPage();
+    cy.wait(3000)
+    loginPage.login("{selectall}{backspace}", "cuitanku123");
+  });
+
+  it("Login unsuccessfully with password is null", () => {
+    loginPage.visitTwitterWeb();
+    cy.wait(3000)
+    loginPage.openLoginPage();
+    cy.wait(3000)
+    loginPage.login("ppoooowty", "{selectall}{backspace}");
   });
 });

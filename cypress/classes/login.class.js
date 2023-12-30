@@ -55,12 +55,11 @@ class LoginPage {
   login(username, password) {
     this.fillUsername(username);
     this.submitUsername();
-    cy.get('[data-testid="mask"]').then(($elementParent) => {
+    cy.get('[class="css-175oi2r r-1wbh5a2 r-htvplk r-1udh08x r-1867qdf r-kwpbio r-rsyp9y r-1pjcn9w r-1279nm1"]').then(($elementParent) => {
       if($elementParent.find('[name="password"]').length > 0 ){
         cy.log('username not null')
         this.fillPassword(password);
         this.submitPassword();
-        
       }
       else{
         cy.log('username null')
